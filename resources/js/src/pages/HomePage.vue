@@ -34,7 +34,7 @@ const email = defineInputBinds('email');
             <button @click="decrement" type="button" class="btn btn-outline-primary px-4 py-1 fs-5 ">-</button>
             <button @click="increment" type="button" class="btn btn-outline-primary px-4 py-1 fs-5">+</button>
          </div>
-         <!-- VeeValidate -->
+         <!-- VeeValidate Test -->
          <!-- <h3>VeeValidate</h3>
          <input class="form-control w-25 mt-0 mb-1" v-bind="email" type="email" id="field-email" name="email"
             placeholder="Email" />
