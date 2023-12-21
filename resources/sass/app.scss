@@ -1,0 +1,57 @@
+// Fonts
+@import url('https://fonts.bunny.net/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+
+.gradient {
+  /* fallback for old browsers */
+  background: #84fab0;
+  height: 100vh;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(
+    to right,
+    rgba(132, 250, 176, 0.5),
+    rgba(143, 211, 244, 0.5)
+  );
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(
+    to right,
+    rgba(132, 250, 176, 0.5),
+    rgba(143, 211, 244, 0.5)
+  );
+}
+
+.gradient-button {
+  background: #84fab0;
+  background: -webkit-linear-gradient(
+    to right,
+    rgba(132, 250, 176, 1),
+    rgba(143, 211, 244, 1)
+  );
+}
+
+.gradient-custom-btn {
+  background: rgb(69, 151, 192);
+  border: none;
+  padding: 0px 8px;
+  color:white;
+  font-weight: bolder;
+  margin-left: 0px;
+  cursor: auto;
+  background: -webkit-linear-gradient(
+    to right,
+    rgb(67, 199, 225),
+    rgb(69, 151, 192)
+  );
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+

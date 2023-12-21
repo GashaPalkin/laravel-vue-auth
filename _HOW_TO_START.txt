@@ -1,0 +1,10 @@
+в терминале от openserver
+cd domains
+cd laravel-vue
+php artsian serve
+
+в терминале VS Code 
+npm run dev
+
+заходить по ссылке от artisan
+INFO  Server running on [http://127.0.0.1:8000]
