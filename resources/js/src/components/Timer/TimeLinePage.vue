@@ -1,10 +1,10 @@
 <script setup>
+import { watchPostEffect, ref, nextTick } from 'vue'
 import TimeLineItem from '@/components/Timer/TimeLineItem.vue'
-const props = defineProps(['timeLineItems', 'activitySelectOptions', 'activities'])
-const emit = defineEmits(['setTimeLineActivityItem'])
-import { onMounted, ref } from 'vue'
+const props = defineProps(['timeLineItems', 'activitySelectOptions', 'activities', 'currentPage'])
+const emit = defineEmits(['setTimeLineActivityItem', 'updateActivitySeconds'])
 
-// todo: вынести в хук
+// для прокрутки к текущему часу (ссылки на элементы из цикла v-for)
 const timelineItemsRefs = ref([])
 function scrollToCurrentHour() {
   const currentHour = new Date().getHours()
@@ -14,8 +14,14 @@ function scrollToCurrentHour() {
     timelineItemsRefs.value[currentHour - 1].$el.scrollIntoView()
   }
 }
-// ***
-onMounted(scrollToCurrentHour)
+
+// важно именно watchPostEffect в связке с async и nextTick  чтобы успело все отрисоваться
+watchPostEffect(async () => {
+  if (props.currentPage === 'timeline') {
+    await nextTick()
+    scrollToCurrentHour()
+  }
+})
 </script>
 
 <template>
@@ -23,7 +29,8 @@ onMounted(scrollToCurrentHour)
     <ul class="list">
       <TimeLineItem v-for="timeLineItem in timeLineItems" :key="timeLineItem.hour" :activities="activities"
         :timeLineItem="timeLineItem" :activitySelectOptions="activitySelectOptions" ref="timelineItemsRefs"
-        @selectActivity="emit('setTimeLineActivityItem', { timeLineItem, activity: $event })" />
+        @selectActivity="emit('setTimeLineActivityItem', { timeLineItem, activity: $event })"
+        @updateActivitySeconds="emit('updateActivitySeconds', timeLineItem, $event)" />
     </ul>
   </section>
 </template>

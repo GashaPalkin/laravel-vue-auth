@@ -8,10 +8,10 @@ const newActivity = ref('')
 </script>
 
 <template>
-  <section class="container pt-2 pb-5 d-flex flex-column">
+  <section class="container-lg pt-2 pb-5 d-flex flex-column">
     <div class="d-flex mt-3 mx-2 gap-2">
       <input v-model="newActivity" type="text" id="field-name" name="name" placeholder="Добавить активность"
-        class="form-control form-control-lg" />
+        class="form-control form-control-lg" @keyup.enter="emit('createActivity', newActivity), newActivity = ''" />
       <AddIcon size="28" :disabled="newActivity.trim() == ''"
         @click="emit('createActivity', newActivity), newActivity = ''" />
     </div>

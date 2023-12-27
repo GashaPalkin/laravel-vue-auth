@@ -1,43 +1,25 @@
 <script setup>
+import ProgressItem from '@/components/Timer/ProgressItem.vue'
+import { inject } from "vue";
+const activities = inject('activities')
+
+// те активности, у которых задано время на ActivitiesPage
+const trackedAcitivities = activities.filter(({ secondsToComplete }) => secondsToComplete)
 
 </script>
 
-<template>  
-<section class=" container pt-2 pb-4">
-   <div class="mx-2 mt-4">
-      <h4>reading</h4>
-      <div class="progress">
-        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0"
-          aria-valuemax="100"></div>
-      </div>
-      <div class="percent d-flex justify-content-between">
-        <p>25%</p>
-        <p>00:00:20 / 00:30:00</p>
-      </div>
-    </div>   
-    <div class="mx-2 mt-4">
-      <h4>coding</h4>
-      <div class="progress">
-        <div class="progress-bar bg-success" role="progressbar" style="width: 55%" aria-valuenow="25" aria-valuemin="0"
-          aria-valuemax="100"></div>
-      </div>
-      <div class="percent d-flex justify-content-between">
-        <p>55%</p>
-        <p>00:00:20 / 00:30:00</p>
-      </div>
-    </div>   
-    <div class="mx-2 mt-4">
-      <h4>workout</h4>
-      <div class="progress">
-        <div class="progress-bar bg-success" role="progressbar" style="width: 15%" aria-valuenow="25" aria-valuemin="0"
-          aria-valuemax="100"></div>
-      </div>
-      <div class="percent d-flex justify-content-between">
-        <p>15%</p>
-        <p>00:00:20 / 00:30:00</p>
-      </div>
-    </div>   
+<template>
+  <section class="container-lg pt-2 pb-5 d-flex flex-column">
+    <ProgressItem v-for="(activity, index) in trackedAcitivities" :key="activity.id" :activity="activity"
+      :progress="17 + (index * 19)" />    
+      <!-- если нет активностей -->
+    <img v-if="!trackedAcitivities.length" class="no_activities my-5" src="../../../../img/no_activities.svg" alt="no activities">  
   </section>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.no_activities {
+  max-width: 350px;
+  align-self: center;
+}
+</style>

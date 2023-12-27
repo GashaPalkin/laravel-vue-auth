@@ -6,13 +6,12 @@ import { ref } from 'vue'
 const props = defineProps({
   timeLineItem: {
     type: Object
-  },
-  seconds: {
-    default: 0,
-    type: Number
-  },
+  }, 
 })
-// получить в формате 00:00:00 в placeholder
+const emit = defineEmits(['updateActivitySeconds'])
+
+// todo: вынести в хук. используется еще в компоненте ActivitiesItem
+// чтобы получить в формате 00:00:00 в placeholder
 function formatSeconds(seconds) {
   const date = new Date()
   date.setTime(Math.abs(seconds) * 1000)
@@ -20,11 +19,16 @@ function formatSeconds(seconds) {
   return utc.substring(utc.indexOf(':') - 2, utc.indexOf(':') + 6)
 }
 
-const seconds = ref(props.seconds)
+const seconds = ref( props.timeLineItem.activitySeconds)
 const isRunning = ref(false)
+// чтобы кнопка была активна только для текущего часа
 const isStartButtonDisabled = props.timeLineItem.hour == new Date().getHours()
+
 function startTimer() {
+  // в переменную, чтобы можно было сбросить (clearInterval)
   isRunning.value = setInterval(() => {
+    // для обновления в объекте timeLineItem по цепочке до корневого компонента
+    emit('updateActivitySeconds', 1)
     seconds.value++
   }, 1000)
 }
@@ -34,6 +38,7 @@ function stopTimer() {
 }
 function resetTimer() {
   stopTimer()
+  emit('updateActivitySeconds', -seconds.value)
   seconds.value = 0
 }
 </script>

@@ -4,14 +4,16 @@ import BaseSelect from '@/ui/BaseSelect.vue'
 import TimeLineTimer from '@/components/Timer/TimeLineTimer.vue'
 import { computed } from 'vue'
 const props = defineProps(['timeLineItem', 'activitySelectOptions', 'activities'])
+const emit = defineEmits(['selectActivity', 'updateActivitySeconds'])
+
 const currentHour = new Date().getHours()
+
 function selectActivity(id) {
   emit(
     'selectActivity',
     props.activities.find((activity) => activity.id == id) || null
   )
 }
-const emit = defineEmits(['selectActivity'])
 const resetSelect = () => {
   props.timeLineItem.activityId = null
 }
@@ -23,14 +25,16 @@ const formattedHour = computed(() => {
 
 <template>
   <li class="list__item">
-    <a class="item__time" :class="timeLineItem.hour == currentHour ? 'active' : ''" href="#">{{ formattedHour }}</a>
+    <!-- чтобы не прокручивалось в начало страницы при клике на час - @click.prevent  -->
+    <a class="item__time" @click.prevent :class="timeLineItem.hour == currentHour ? 'active' : ''" href="#">{{ formattedHour }}</a>
     <div class="container">
       <div class="d-flex gap-2 mb-3 ">
         <DeleteIcon size="30" @click="resetSelect" />
         <BaseSelect :options="activitySelectOptions" placeholder="nothing" :selectedItem="timeLineItem.activityId"
           @select="selectActivity" />
-      </div>
-      <TimeLineTimer :timeLineItem="timeLineItem" :seconds="timeLineItem.activitySeconds"/>
+      </div>     
+      <!-- получаем событие updateActivitySeconds из TimeLineComponent и сразу передаем выше в TimelinePage -->
+      <TimeLineTimer :timeLineItem="timeLineItem" @updateActivitySeconds="emit('updateActivitySeconds', $event)" />
     </div>
   </li>
 </template>

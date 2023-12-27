@@ -1,26 +1,51 @@
 <script setup>
+import { inject, computed } from "vue";
 import RestartIcon from '@/ui/icons/Restart.vue'
 import DeleteIcon from '@/ui/icons/Delete.vue'
 import BaseSelect from '@/ui/BaseSelect.vue'
 const props = defineProps(['activity'])
+const timeLineItems = inject('timeLineItems')
 const emit = defineEmits(['delete'])
+
 const generatePeriodSelectOptions = () => {
-  const periodsInMinutes = [15, 30, 45, 60, 90, 120]
+  const periodsInMinutes = [1, 15, 30, 45, 60, 90, 120]
   return periodsInMinutes.map((periodInMinutes) => ({
     value: periodInMinutes * 60,
     label: generatePeriodSelectOptionsLabel(periodInMinutes)
   }))
 }
+
 const generatePeriodSelectOptionsLabel = (periodInMinutes) => {
   const hours = Math.floor(periodInMinutes / 60).toString().padStart(2, 0)
   const minutes = (periodInMinutes % 60).toString().padStart(2, 0)
   return `${hours}:${minutes}`
 }
+
 const options = generatePeriodSelectOptions()
 
 const resetSelect = () => {
   props.activity.secondsToComplete = null
 }
+
+// todo: вынести в хук. используется еще в компоненте TimeLineTimer
+function formatSeconds(seconds) {
+  const date = new Date()
+  date.setTime(Math.abs(seconds) * 1000)
+  const utc = date.toUTCString()
+  return utc.substring(utc.indexOf(':') - 2, utc.indexOf(':') + 6)
+}
+
+// вынести в хук. Потому что используется еще и в ProgressItem
+function getTotalActivitySeconds(activity, timeLineItems) {
+  return timeLineItems.filter((timeLineItem) => timeLineItem.activityId === activity.id)
+    .reduce((totalSeconds, timeLineItem) => Math.round(timeLineItem.activitySeconds + totalSeconds), 0)
+}
+
+const secondsDiff = computed(() => getTotalActivitySeconds(props.activity, timeLineItems) - props.activity.secondsToComplete)
+const sign = computed(() => secondsDiff.value >= 0 ? '+' : '-')
+const seconds = computed(() => `${sign.value}${formatSeconds(secondsDiff.value)}`)
+const colorsClasses = computed(() => secondsDiff.value < 0 ? 'bg-red' : 'bg-green')
+
 </script>
 
 <template>
@@ -33,12 +58,31 @@ const resetSelect = () => {
       <RestartIcon size="23" @click="resetSelect" />
       <!-- по хорошему надо @select делать через emit и отправлять вверх -->
       <BaseSelect :options="options" placeholder="hh:mm" :selectedItem="activity.secondsToComplete || null"
-        @select="activity.secondsToComplete = $event" />
-      <input type="text" id="field-name" name="name" placeholder="00:00:00"
-        class="form-control form-control-lg w-25 fs-4 fw-bold text-center" disabled />
+        @select="activity.secondsToComplete = $event" />      
+      <input v-if="activity.secondsToComplete" type="text" id="field-name" name="name" :placeholder="seconds"
+        :class="colorsClasses" class="form-control form-control-lg fw-bold text-center restOfSeconds" disabled />
     </div>
     <hr>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.restOfSeconds {
+  padding: 0;
+  width: 30%;
+  font-size: 20px;
+}
+.bg-red {
+  background-color: #ff000040 !important;
+}
+.bg-green {
+  background-color: #0af00a42 !important;
+}
+
+@media screen and (max-width: 600px) {
+  .restOfSeconds {
+    width: 50%;
+    font-size: 16px;
+  }
+}
+</style>
