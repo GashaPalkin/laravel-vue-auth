@@ -3,7 +3,7 @@ import ProgressItem from '@/components/Timer/ProgressItem.vue'
 import { inject } from "vue";
 const activities = inject('activities')
 
-// те активности, у которых задано время на ActivitiesPage
+// активности, у которых задано время на ActivitiesPage
 const trackedAcitivities = activities.filter(({ secondsToComplete }) => secondsToComplete)
 
 </script>
