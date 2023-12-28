@@ -14,5 +14,3 @@ const props = defineProps({
     </svg>
   </span>
 </template>
-
-<style lang="scss" scoped></style>

@@ -23,7 +23,6 @@ const token = computed(() => store.state.token)
 				<!-- <router-link class="nav-link" :to="'posts/'+ item.id">
 					<button type="button" class="btn btn-outline-primary">Подробнее</button>
 				</router-link> -->
-				
 				<!-- для детальной на в модальном окне -->
 				<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
 					:data-bs-target="'#modal' + '-' + item.id">Подробнее</button>
@@ -42,6 +41,7 @@ const token = computed(() => store.state.token)
 .btn {
 	border-radius: 0;
 }
+
 img {
 	max-height: 320px;
 	object-fit: cover;

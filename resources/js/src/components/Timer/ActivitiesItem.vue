@@ -3,6 +3,7 @@ import { inject, computed } from "vue";
 import RestartIcon from '@/ui/icons/Restart.vue'
 import DeleteIcon from '@/ui/icons/Delete.vue'
 import BaseSelect from '@/ui/BaseSelect.vue'
+import { getTotalActivitySeconds, formatSeconds } from '@/functions.js'
 const props = defineProps(['activity'])
 const timeLineItems = inject('timeLineItems')
 const emit = defineEmits(['delete'])
@@ -27,20 +28,6 @@ const resetSelect = () => {
   props.activity.secondsToComplete = null
 }
 
-// todo: вынести в хук. используется еще в компоненте TimeLineTimer
-function formatSeconds(seconds) {
-  const date = new Date()
-  date.setTime(Math.abs(seconds) * 1000)
-  const utc = date.toUTCString()
-  return utc.substring(utc.indexOf(':') - 2, utc.indexOf(':') + 6)
-}
-
-// вынести в хук. Потому что используется еще и в ProgressItem
-function getTotalActivitySeconds(activity, timeLineItems) {
-  return timeLineItems.filter((timeLineItem) => timeLineItem.activityId === activity.id)
-    .reduce((totalSeconds, timeLineItem) => Math.round(timeLineItem.activitySeconds + totalSeconds), 0)
-}
-
 const secondsDiff = computed(() => getTotalActivitySeconds(props.activity, timeLineItems) - props.activity.secondsToComplete)
 const sign = computed(() => secondsDiff.value >= 0 ? '+' : '-')
 const seconds = computed(() => `${sign.value}${formatSeconds(secondsDiff.value)}`)
@@ -58,7 +45,7 @@ const colorsClasses = computed(() => secondsDiff.value < 0 ? 'bg-red' : 'bg-gree
       <RestartIcon size="23" @click="resetSelect" />
       <!-- по хорошему надо @select делать через emit и отправлять вверх -->
       <BaseSelect :options="options" placeholder="hh:mm" :selectedItem="activity.secondsToComplete || null"
-        @select="activity.secondsToComplete = $event" />      
+        @select="activity.secondsToComplete = $event" />
       <input v-if="activity.secondsToComplete" type="text" id="field-name" name="name" :placeholder="seconds"
         :class="colorsClasses" class="form-control form-control-lg fw-bold text-center restOfSeconds" disabled />
     </div>
@@ -72,9 +59,11 @@ const colorsClasses = computed(() => secondsDiff.value < 0 ? 'bg-red' : 'bg-gree
   width: 30%;
   font-size: 20px;
 }
+
 .bg-red {
   background-color: #ff000040 !important;
 }
+
 .bg-green {
   background-color: #0af00a42 !important;
 }

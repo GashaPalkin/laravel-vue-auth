@@ -15,7 +15,7 @@ function scrollToCurrentHour() {
   }
 }
 
-// важно именно watchPostEffect в связке с async и nextTick  чтобы успело все отрисоваться
+// важно именно watchPostEffect в связке с async и nextTick, чтобы успело все отрисоваться
 watchPostEffect(async () => {
   if (props.currentPage === 'timeline') {
     await nextTick()

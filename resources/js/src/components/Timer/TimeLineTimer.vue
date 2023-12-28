@@ -3,27 +3,23 @@ import RestartIcon from '@/ui/icons/Restart.vue'
 import StartIcon from '@/ui/icons/Start.vue'
 import PauseIcon from '@/ui/icons/Pause.vue'
 import { ref } from 'vue'
+import { formatSeconds } from '@/functions.js'
+import { useControlTimer } from '@/composables/controlTimer.js'
 const props = defineProps({
   timeLineItem: {
     type: Object
-  }, 
+  },
 })
+
 const emit = defineEmits(['updateActivitySeconds'])
-
-// todo: вынести в хук. используется еще в компоненте ActivitiesItem
-// чтобы получить в формате 00:00:00 в placeholder
-function formatSeconds(seconds) {
-  const date = new Date()
-  date.setTime(Math.abs(seconds) * 1000)
-  const utc = date.toUTCString()
-  return utc.substring(utc.indexOf(':') - 2, utc.indexOf(':') + 6)
-}
-
-const seconds = ref( props.timeLineItem.activitySeconds)
-const isRunning = ref(false)
 // чтобы кнопка была активна только для текущего часа
 const isStartButtonDisabled = props.timeLineItem.hour == new Date().getHours()
+const seconds = ref(props.timeLineItem.activitySeconds)
 
+// const {  } = useControlTimer()
+
+// TODO: перенести в хук controlTimer
+const isRunning = ref(false)
 function startTimer() {
   // в переменную, чтобы можно было сбросить (clearInterval)
   isRunning.value = setInterval(() => {
@@ -52,5 +48,3 @@ function resetTimer() {
     <StartIcon v-else size="25" @click="startTimer" :disabled="!isStartButtonDisabled" />
   </div>
 </template>
-
-<style lang="scss" scoped></style>

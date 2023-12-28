@@ -11,11 +11,11 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['select'])
-function select(value){
-  emit('select', normilizeSelectedValue(value)) 
+function select(value) {
+  emit('select', normilizeSelectedValue(value))
 }
 // если null или нельзя преобразовать в number - то осталяем как есть
-function normilizeSelectedValue(value){
+function normilizeSelectedValue(value) {
   return typeof value == null || isNaN(value) ? value : +value
 }
 </script>

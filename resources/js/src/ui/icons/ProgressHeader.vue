@@ -1,13 +1,14 @@
 <script setup>
 const props = defineProps({
   title: String,
+  color: String
 })
 </script>
 
 <template>
   <span class="navbar-text d-flex align-items-end">
     <b>{{ title }}</b>
-    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#dc3545" class="bi bi-bullseye ms-2"
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" :fill="color" class="bi bi-bullseye ms-2"
       viewBox="0 0 16 16">
       <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
       <path d="M8 13A5 5 0 1 1 8 3a5 5 0 0 1 0 10zm0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
@@ -16,5 +17,3 @@ const props = defineProps({
     </svg>
   </span>
 </template>
-
-<style lang="scss" scoped></style>
