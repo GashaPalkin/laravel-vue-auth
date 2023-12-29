@@ -1,5 +1,7 @@
 import { ref } from 'vue'
-export function useControlTimer() {
+
+export function useControlTimer(emit, seconds) {
+
   const isRunning = ref(false)
   function startTimer() {
     // в переменную, чтобы можно было сбросить (clearInterval)
@@ -18,4 +20,12 @@ export function useControlTimer() {
     emit('updateActivitySeconds', -seconds.value)
     seconds.value = 0
   }
+
+  return {
+    startTimer,
+    stopTimer,
+    resetTimer,
+    isRunning
+  }
+
 }

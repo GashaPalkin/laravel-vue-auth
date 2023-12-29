@@ -16,27 +16,8 @@ const emit = defineEmits(['updateActivitySeconds'])
 const isStartButtonDisabled = props.timeLineItem.hour == new Date().getHours()
 const seconds = ref(props.timeLineItem.activitySeconds)
 
-// const {  } = useControlTimer()
+const { startTimer, stopTimer, resetTimer, isRunning } = useControlTimer(emit, seconds)
 
-// TODO: перенести в хук controlTimer
-const isRunning = ref(false)
-function startTimer() {
-  // в переменную, чтобы можно было сбросить (clearInterval)
-  isRunning.value = setInterval(() => {
-    // для обновления в объекте timeLineItem по цепочке до корневого компонента
-    emit('updateActivitySeconds', 1)
-    seconds.value++
-  }, 1000)
-}
-function stopTimer() {
-  clearInterval(isRunning.value)
-  isRunning.value = false
-}
-function resetTimer() {
-  stopTimer()
-  emit('updateActivitySeconds', -seconds.value)
-  seconds.value = 0
-}
 </script>
 
 <template>

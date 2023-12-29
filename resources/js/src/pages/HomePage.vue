@@ -1,4 +1,5 @@
 <script setup>
+
 import Animated from '@/components/Animated.vue'
 import Preloader from '@/components/Preloader.vue'
 import { computed, ref, onMounted } from 'vue'
@@ -9,9 +10,9 @@ const decrement = () => store.commit('decrement')
 const increment = () => store.commit('increment')
 const isPreloader = ref(true)
 onMounted(() => {
-  setTimeout(() => {
-    isPreloader.value = false;
-  }, 350);
+   setTimeout(() => {
+      isPreloader.value = false;
+   }, 350);
 })
 // validator
 import { useForm } from 'vee-validate';
@@ -25,7 +26,7 @@ const email = defineInputBinds('email');
 </script>
 
 <template>
-   <div class="pb-3 bg-light rounded d-flex flex-column align-items-center">
+   <div class="pb-1 bg-light rounded d-flex flex-column align-items-center">
       <Preloader v-show="isPreloader"></Preloader>
       <Animated />
       <div class="pb-1 bg-light rounded w-100 d-flex flex-column align-items-center">
@@ -41,6 +42,12 @@ const email = defineInputBinds('email');
          <div v-if="Object.keys(errors).length !== 0" class="alert alert-danger" role="alert">
             <b v-for="err in errors">{{ err }}</b>
          </div> -->
+      </div>
+   </div>
+   <div class="container mb-4">
+      <div class="row">
+         <h4 class="mt-2 mb-2 text-center mt-3">Rich Text Editor</h4>
+         <QuillEditor toolbar="full" style="min-height: 120px;" />
       </div>
    </div>
    <div class="container">
