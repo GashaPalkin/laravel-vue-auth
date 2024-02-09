@@ -33,7 +33,7 @@ const formattedHour = computed(() => {
         <BaseSelect :options="activitySelectOptions" placeholder="nothing" :selectedItem="timeLineItem.activityId"
           @select="selectActivity" />
       </div>     
-      <!-- получаем событие updateActivitySeconds из TimeLineComponent и сразу передаем выше в TimelinePage -->
+      <!-- получаем событие updateActivitySeconds из TimeLineTimer и сразу передаем выше в TimelinePage -->
       <TimeLineTimer :timeLineItem="timeLineItem" @updateActivitySeconds="emit('updateActivitySeconds', $event)" />
     </div>
   </li>
